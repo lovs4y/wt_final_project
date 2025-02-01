@@ -3,6 +3,9 @@ package com.prazhmovska.vladyslava.wt_final_project;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * There everything begins ;)
+ */
 @SpringBootApplication
 public class WtFinalProjectApplication {
 

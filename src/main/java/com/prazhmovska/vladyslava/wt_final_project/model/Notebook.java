@@ -1,9 +1,15 @@
 package com.prazhmovska.vladyslava.wt_final_project.model;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+
 /**
  * Represents a notebook entity in the database.
  * Mapped to the "notebooks" table in the database.
@@ -19,6 +25,7 @@ public class Notebook {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime created;
 
 }
