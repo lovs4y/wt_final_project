@@ -65,7 +65,7 @@ public class ApplicationConfig {
                 }))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/auth/sign-up", "/auth/log-in").permitAll()
-                        .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**", "/api-docs/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())

@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+  wtFinalProject:
+    image: wtfinal-project:latest
+    restart: no
+    ports:
+      - '8011:8011'
+    networks:
+      - 'postgres_network'
+    environment:
+      POSTGRES_ADDRESS: 'postgres'
+      DB_NAME: 'wt_banana_bread'
+      POSTGRES_USERNAME: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+
+networks:
+  postgres_network:
+    external: true
