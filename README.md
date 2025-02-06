@@ -32,12 +32,12 @@ docker network connect postgres_network postgres
 10. If you have no `Environment Variables` field, go to `More Options` and select `Environment Variables`
 11. In the environment variables you have to add key-values to override defaults.
 
-> Note: Here is default environment variables:
-        POSTGRES_ADDRESS="postgres" - with intellij config u have to use 'localhost:5432' value (if postgres container working on 5432 port)
-        DB_NAME="wt_banana_bread"
-        POSTGRES_USERNAME="postgres"
-        POSTGRES_PASSWORD="postgres"
-
+> Note: Here is default environment variables:  
+  > POSTGRES_ADDRESS="postgres" - with intellij config u have to use 'localhost:5432' value (if postgres container working on 5432 port)  
+  > DB_NAME="wt_banana_bread"  
+  > POSTGRES_USERNAME="postgres"  
+  > POSTGRES_PASSWORD="postgres"
+        
 12. There you are. Push run/debug button and have fun! :)
 
 ### Check application runs correctly
