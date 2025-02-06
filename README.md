@@ -23,6 +23,7 @@ docker network connect postgres_network postgres
 8. Run the [Docker compose](setup/docker-compose.yml) file with command: `docker compose up`
 
 #### IntelliJ
+> If you are running project in IntelliJ make sure u have Java 21
 4. Go to intellij
 5. Push burger menu and `Open...`
 6. Select unpacked directory (just directory, no one of packages inside)
@@ -43,7 +44,7 @@ docker network connect postgres_network postgres
 ### Check application runs correctly
 - Fist of all check logs of docker container (if run with docker container)
 or in IntelliJ console (if run with IntelliJ)
-- If everything clear go to `http://localhost:8080/swagger-ui/index.html` - 
+- If everything clear go to `http://localhost:8011/swagger-ui/index.html` - 
 u will see Spring Doc page with project name. It means project works correctly
 
-> note: here specified port (8011) by default, if you changed it - specify your own
+> note: here's specified port (8011) by default, if you changed it - specify your own
