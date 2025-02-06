@@ -1,7 +1,10 @@
 ### Setup
 1. Unpack zip to some directory
 2. Make sure u running postgres
-3. Create new database for this project. Default name in container is wt_banana_bread so it is preferable
+3. Create (or skip if you already have DB) new database for this project. Default name in container is wt_banana_bread so it is preferable
+
+> Note: use one of next instruction: Docker or IntellIJ.
+> If you started application using Docker skip IntelliJ and vise versa
 
 #### Docker (no IntelliJ)
 4. Go to `setup` folder
@@ -11,6 +14,7 @@
 
 Go to [docker compose](setup/docker-compose.yml) file and check `environment` block.
 Change environment variables according to ur setup
+`POSTGRES_ADDRESS` is a name of ur postgres container
 
 7. Execute next commands in terminal:
 ```
@@ -48,3 +52,9 @@ or in IntelliJ console (if run with IntelliJ)
 u will see Spring Doc page with project name. It means project works correctly
 
 > note: here's specified port (8011) by default, if you changed it - specify your own
+
+### Authorization
+Application creates one test user. Use endpoint to authorize: `{base-url}/auth/log-in`
+with body: `{"email": "useremail@email.com", "password": "123456789"}`
+
+It is credentials for this test user.
