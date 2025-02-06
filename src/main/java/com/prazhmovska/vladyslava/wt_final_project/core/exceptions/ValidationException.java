@@ -1,6 +1,8 @@
 package com.prazhmovska.vladyslava.wt_final_project.core.exceptions;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 /**
  * Custom exception for handling validation errors.
  * Includes a comment describing the error.
@@ -10,6 +12,7 @@ import lombok.Data;
  * throw new ValidationException("Invalid input data");
  * }</pre>
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class ValidationException extends RuntimeException {
     private String comment;
