@@ -3,6 +3,7 @@ package com.prazhmovska.vladyslava.wt_final_project;
 import com.prazhmovska.vladyslava.wt_final_project.model.Note;
 import com.prazhmovska.vladyslava.wt_final_project.model.Notebook;
 import com.prazhmovska.vladyslava.wt_final_project.model.User;
+import com.prazhmovska.vladyslava.wt_final_project.model.repository.NotebookRepository;
 import com.prazhmovska.vladyslava.wt_final_project.model.repository.UserRepository;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -31,44 +32,50 @@ public class WtFinalProjectApplication {
     // actual password is: 123456789
     // password: $2a$10$jcgLMQR3WHVGcKKztXxEFe1SicPduR0uJ8PUi135d/finVk04.V/y
     @Bean
-    ApplicationRunner initialData(UserRepository userRepository) {
+    ApplicationRunner initialData(UserRepository userRepository, NotebookRepository noteBookRepository) {
         return args -> {
+            User save = userRepository.save(new User(
+                    null,
+                    "Initial User 1",
+                    "useremail@email.com",
+                    "$2a$10$jcgLMQR3WHVGcKKztXxEFe1SicPduR0uJ8PUi135d/finVk04.V/y",
+                    null
+            ));
+
             Note firstNote = new Note(
                     null,
                     "First Note",
                     LocalDateTime.now(),
                     null,
-                    "Mocked content"
+                    "Mocked content",
+                    null
             );
             Note secondNote = new Note(
                     null,
                     "Second Note",
                     LocalDateTime.now(),
                     null,
-                    "Mocked content"
+                    "Mocked content",
+                    null
             );
             Note thirdNote = new Note(
                     null,
                     "Third Note",
                     LocalDateTime.now(),
                     null,
-                    "Mocked content"
+                    "Mocked content",
+                    null
             );
 
             Notebook notebook = new Notebook(
                     null,
                     "First notebook",
                     LocalDateTime.now(),
+                    save.getId(),
                     List.of(firstNote, secondNote, thirdNote)
             );
 
-            userRepository.save(new User(
-                    null,
-                    "Initial User 1",
-                    "useremail@email.com",
-                    "$2a$10$jcgLMQR3WHVGcKKztXxEFe1SicPduR0uJ8PUi135d/finVk04.V/y",
-                    List.of(notebook))
-            );
+            noteBookRepository.save(notebook);
         };
     }
 }

@@ -1,20 +1,9 @@
-package com.prazhmovska.vladyslava.wt_final_project.model;
-
+package com.prazhmovska.vladyslava.wt_final_project.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -22,42 +11,20 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Represents a user entity in the database.
- * The user has an ID, name, email, and password.
- *
- * <p>This class is mapped to a database table (typically "user") and is used for storing
- * and retrieving user-related information.</p>
+ * User details without hibernate relations. Used to avoid {@link org.hibernate.LazyInitializationException}
+ * in cases when transaction has not been provided ({@link org.springframework.transaction.annotation.Transactional} has not been used).
+ * Represents all details about searchable user and implements {@link UserDetails} needed by Spring Security.
+ * Used in {@link org.springframework.security.core.context.SecurityContext} as a authentication principal.
  */
-@Table(name = "users")
 @Data
-@Entity
-@NoArgsConstructor
 @AllArgsConstructor
-public class User implements UserDetails {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class UserDto implements UserDetails {
+
     private Long id;
     private String name;
     private String email;
-    /**
-     * The password of the user.
-     * This field holds the password, which is excluded from serialization using {@link JsonIgnore}.
-     * It ensures that the password is not included in JSON responses.
-     * Password is encrypted by {@link org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder}.
-     */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-
-    /**
-     * One-to-many relation with {@link Notebook}s.
-     * <br>
-     * Entities joined by <code>user_id</code>.
-     * <br>
-     * Specified cascade type as {@link CascadeType#ALL}.
-     */
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private List<Notebook> notebooks;
 
     /**
      * Basic for spring security method to get username. In this case it is email.
@@ -118,5 +85,3 @@ public class User implements UserDetails {
         return true;
     }
 }
-
-

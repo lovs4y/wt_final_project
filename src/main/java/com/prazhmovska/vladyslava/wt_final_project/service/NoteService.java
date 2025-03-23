@@ -1,8 +1,12 @@
 package com.prazhmovska.vladyslava.wt_final_project.service;
 
+import com.prazhmovska.vladyslava.wt_final_project.core.exceptions.AuthenticationException;
 import com.prazhmovska.vladyslava.wt_final_project.core.exceptions.NotFoundException;
+import com.prazhmovska.vladyslava.wt_final_project.core.exceptions.ValidationException;
 import com.prazhmovska.vladyslava.wt_final_project.model.Note;
+import com.prazhmovska.vladyslava.wt_final_project.model.Notebook;
 import com.prazhmovska.vladyslava.wt_final_project.model.repository.NoteRepository;
+import com.prazhmovska.vladyslava.wt_final_project.model.repository.NotebookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +19,9 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 @Service
-public class NoteService {
+public class NoteService extends AuthorizedContext {
     private final NoteRepository noteRepository;
+    private final NotebookRepository notebookRepository;
 
     /**
      * Retrieves all notes.
@@ -27,7 +32,7 @@ public class NoteService {
      * @return a list of all {@link Note} entities
      */
     public List<Note> list() {
-        return noteRepository.findAll();
+        return noteRepository.findAllByUserId(getCurrentUserId());
     }
 
     /**
@@ -39,7 +44,17 @@ public class NoteService {
      * @return the saved {@link Note} entity
      */
     public Note create(Note note) {
-        return noteRepository.save(note);
+        if (note.getNotebookId() == null) {
+            throw new ValidationException("Notebook id cannot be null");
+        }
+        Note save = noteRepository.save(note);
+        Notebook notebook = notebookRepository.findByIdAndUserId(
+                        note.getNotebookId(),
+                        getCurrentUserId())
+                .orElseThrow(() -> new NotFoundException("Notebook", "Notebook not found"));
+        notebook.getNotes().add(note);
+        notebookRepository.save(notebook);
+        return save;
     }
 
     /**
@@ -53,7 +68,8 @@ public class NoteService {
      * @throws NotFoundException if no note is found with the given ID
      */
     public Note getById(Long id) {
-        return noteRepository.findById(id).orElseThrow(() -> new NotFoundException("Note", "Note not found"));
+        return noteRepository.findById(id, getCurrentUserId())
+                .orElseThrow(() -> new NotFoundException("Note", "Note not found"));
     }
 
     /**
@@ -65,8 +81,8 @@ public class NoteService {
      * @param name requested name
      * @return the {@link Note} entity with the specified title
      */
-    public Note getByName(String name) {
-        return noteRepository.findByTitle(name);
+    public List<Note> getByName(String name) {
+        return noteRepository.findByTitle(name, getCurrentUserId());
     }
 
     /**
@@ -81,6 +97,10 @@ public class NoteService {
      */
     public Note update(Long id, Note note) {
         note.setId(id);
+        if (note.getNotebookId() == null) {
+            throw new ValidationException("Notebook id cannot be null");
+        }
+        noteRepository.findById(id, getCurrentUserId()).orElseThrow(() -> new AuthenticationException("Forbidden"));
         return noteRepository.save(note);
     }
 
@@ -93,6 +113,7 @@ public class NoteService {
      * @param id the ID of the note to delete
      */
     public void delete(Long id) {
+        noteRepository.findById(id, getCurrentUserId()).orElseThrow(() -> new AuthenticationException("Forbidden"));
         noteRepository.deleteById(id);
     }
 }

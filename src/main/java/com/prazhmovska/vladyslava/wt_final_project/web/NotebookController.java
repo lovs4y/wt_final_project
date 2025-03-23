@@ -1,6 +1,7 @@
 package com.prazhmovska.vladyslava.wt_final_project.web;
 
 import com.prazhmovska.vladyslava.wt_final_project.model.Notebook;
+import com.prazhmovska.vladyslava.wt_final_project.service.AuthenticationHelper;
 import com.prazhmovska.vladyslava.wt_final_project.service.NotebookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -65,6 +67,7 @@ public class NotebookController {
      */
     @PostMapping
     public Notebook create(@RequestBody Notebook notebook) {
+        notebook.setUserId(AuthenticationHelper.getAuthenticationDetails().getId());
         return notebookService.create(notebook);
     }
 

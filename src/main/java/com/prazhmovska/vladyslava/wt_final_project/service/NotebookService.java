@@ -1,5 +1,6 @@
 package com.prazhmovska.vladyslava.wt_final_project.service;
 
+import com.prazhmovska.vladyslava.wt_final_project.core.exceptions.AuthenticationException;
 import com.prazhmovska.vladyslava.wt_final_project.core.exceptions.NotFoundException;
 import com.prazhmovska.vladyslava.wt_final_project.model.Notebook;
 import com.prazhmovska.vladyslava.wt_final_project.model.repository.NotebookRepository;
@@ -15,7 +16,7 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 @Service
-public class NotebookService {
+public class NotebookService extends AuthorizedContext {
     private final NotebookRepository notebookRepository;
 
     /**
@@ -24,7 +25,9 @@ public class NotebookService {
      * @return a {@link List} of all {@link Notebook} entities
      */
     public List<Notebook> list() {
-        return notebookRepository.findAll();
+        return notebookRepository.findAllByUserId(
+                getCurrentUserId()
+        );
     }
 
     /**
@@ -35,6 +38,7 @@ public class NotebookService {
      */
     public Notebook create(Notebook notebook) {
         notebook.setCreated(LocalDateTime.now());
+        notebook.setUserId(getCurrentUserId());
         return notebookRepository.save(notebook);
     }
 
@@ -46,7 +50,8 @@ public class NotebookService {
      * @throws NotFoundException if no notebook is found with the given ID
      */
     public Notebook getById(Long id) {
-        return notebookRepository.findById(id).orElseThrow(() -> new NotFoundException("Notebook", "Notebook not found"));
+        return notebookRepository.findByIdAndUserId(id, getCurrentUserId())
+                .orElseThrow(() -> new NotFoundException("Notebook", "Notebook not found"));
     }
 
     /**
@@ -56,7 +61,7 @@ public class NotebookService {
      * @return the {@link Notebook} with the given name
      */
     public Notebook getByName(String name) {
-        return notebookRepository.findByName(name);
+        return notebookRepository.findByNameAndUserId(name, getCurrentUserId());
     }
 
     /**
@@ -68,6 +73,9 @@ public class NotebookService {
      */
     public Notebook update(Long id, Notebook notebook) {
         notebook.setId(id);
+        notebook.setUserId(getCurrentUserId());
+        notebookRepository.findByIdAndUserId(id, getCurrentUserId())
+                .orElseThrow(() -> new AuthenticationException("Forbidden"));
         return notebookRepository.save(notebook);
     }
 
@@ -77,6 +85,8 @@ public class NotebookService {
      * @param id the ID of the notebook to delete
      */
     public void delete(Long id) {
+        notebookRepository.findByIdAndUserId(id, getCurrentUserId())
+                .orElseThrow(() -> new AuthenticationException("Forbidden"));
         notebookRepository.deleteById(id);
     }
 }

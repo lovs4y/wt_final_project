@@ -2,6 +2,7 @@ package com.prazhmovska.vladyslava.wt_final_project.core.config;
 
 import com.prazhmovska.vladyslava.wt_final_project.core.exceptions.NotFoundException;
 import com.prazhmovska.vladyslava.wt_final_project.model.User;
+import com.prazhmovska.vladyslava.wt_final_project.model.dto.UserDto;
 import com.prazhmovska.vladyslava.wt_final_project.model.repository.UserRepository;
 import com.prazhmovska.vladyslava.wt_final_project.service.JwtService;
 import jakarta.servlet.FilterChain;
@@ -66,7 +67,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String email = jwtService.extractUserEmail(jwt);
 
         if (StringUtils.isNotEmpty(email) && SecurityContextHolder.getContext().getAuthentication() == null) {
-            User userDetails = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("User", "User does not exist"));
+            UserDto userDetails = userRepository.findUserDetailsByEmail(email).orElseThrow(() -> new NotFoundException("User", "User does not exist"));
 
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 SecurityContext context = SecurityContextHolder.createEmptyContext();

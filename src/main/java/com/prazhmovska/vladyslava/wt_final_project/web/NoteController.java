@@ -53,7 +53,7 @@ public class NoteController {
      * @return the {@link Note} entity with the specified title
      */
     @GetMapping("/by-title")
-    public Note noteByName(@RequestParam String name) {
+    public List<Note> noteByName(@RequestParam String name) {
         return noteService.getByName(name);
     }
 
@@ -75,7 +75,7 @@ public class NoteController {
      * @param id   to update
      * @return the updated {@link Note} entity
      */
-    @PutMapping
+    @PutMapping("/{id}")
     public Note update(@RequestBody Note note, @PathVariable Long id) {
         return noteService.update(id, note);
     }
