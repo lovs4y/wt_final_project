@@ -71,6 +71,7 @@ public class WtFinalProjectApplication {
                     null,
                     "First notebook",
                     LocalDateTime.now(),
+                    LocalDateTime.now(),
                     save.getId(),
                     List.of(firstNote, secondNote, thirdNote)
             );
