@@ -10,6 +10,7 @@ import com.prazhmovska.vladyslava.wt_final_project.model.repository.NotebookRepo
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -47,6 +48,8 @@ public class NoteService extends AuthorizedContext {
         if (note.getNotebookId() == null) {
             throw new ValidationException("Notebook id cannot be null");
         }
+        note.setCreated(LocalDateTime.now());
+        note.setModified(LocalDateTime.now());
         Note save = noteRepository.save(note);
         Notebook notebook = notebookRepository.findByIdAndUserId(
                         note.getNotebookId(),
@@ -97,6 +100,7 @@ public class NoteService extends AuthorizedContext {
      */
     public Note update(Long id, Note note) {
         note.setId(id);
+        note.setModified(LocalDateTime.now());
         if (note.getNotebookId() == null) {
             throw new ValidationException("Notebook id cannot be null");
         }

@@ -38,6 +38,7 @@ public class NotebookService extends AuthorizedContext {
      */
     public Notebook create(Notebook notebook) {
         notebook.setCreated(LocalDateTime.now());
+        notebook.setModified(LocalDateTime.now());
         notebook.setUserId(getCurrentUserId());
         return notebookRepository.save(notebook);
     }
@@ -73,6 +74,7 @@ public class NotebookService extends AuthorizedContext {
      */
     public Notebook update(Long id, Notebook notebook) {
         notebook.setId(id);
+        notebook.setModified(LocalDateTime.now());
         notebook.setUserId(getCurrentUserId());
         notebookRepository.findByIdAndUserId(id, getCurrentUserId())
                 .orElseThrow(() -> new AuthenticationException("Forbidden"));

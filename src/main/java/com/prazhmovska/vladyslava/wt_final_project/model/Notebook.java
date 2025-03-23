@@ -40,6 +40,8 @@ public class Notebook {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime created;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private LocalDateTime modified;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Column(name = "user_id")
     private Long userId;
 
