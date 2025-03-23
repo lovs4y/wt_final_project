@@ -1,0 +1,25 @@
+type User {
+    id: ID,
+    name: String,
+    email: String,
+    notebooks: [Notebook]
+}
+
+type Notebook {
+    id: ID,
+    name: String,
+    userId: Int,
+    created: Date,
+    notes: [Note]
+}
+
+type Note {
+    id: ID,
+    title: String,
+    content: String,
+    notebookId: Int,
+    created: Date,
+    modified: Date
+}
+
+scalar Date
