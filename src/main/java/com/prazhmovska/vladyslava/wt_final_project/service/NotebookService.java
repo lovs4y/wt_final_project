@@ -5,6 +5,7 @@ import com.prazhmovska.vladyslava.wt_final_project.core.exceptions.NotFoundExcep
 import com.prazhmovska.vladyslava.wt_final_project.model.Notebook;
 import com.prazhmovska.vladyslava.wt_final_project.model.repository.NotebookRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,6 +19,7 @@ import java.util.List;
 @Service
 public class NotebookService extends AuthorizedContext {
     private final NotebookRepository notebookRepository;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     /**
      * Retrieves a list of all notebooks.
@@ -73,11 +75,13 @@ public class NotebookService extends AuthorizedContext {
      * @return the updated {@link Notebook}
      */
     public Notebook update(Long id, Notebook notebook) {
+        Notebook present = notebookRepository.findByIdAndUserId(id, getCurrentUserId())
+                .orElseThrow(() -> new AuthenticationException("Forbidden"));
         notebook.setId(id);
+        notebook.setCreated(present.getCreated());
         notebook.setModified(LocalDateTime.now());
         notebook.setUserId(getCurrentUserId());
-        notebookRepository.findByIdAndUserId(id, getCurrentUserId())
-                .orElseThrow(() -> new AuthenticationException("Forbidden"));
+        notebook.setNotes(present.getNotes());
         return notebookRepository.save(notebook);
     }
 

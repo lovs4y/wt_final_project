@@ -99,12 +99,12 @@ public class NoteService extends AuthorizedContext {
      * @return the updated {@link Note} entity
      */
     public Note update(Long id, Note note) {
+        noteRepository.findById(id, getCurrentUserId()).orElseThrow(() -> new AuthenticationException("Forbidden"));
         note.setId(id);
         note.setModified(LocalDateTime.now());
         if (note.getNotebookId() == null) {
             throw new ValidationException("Notebook id cannot be null");
         }
-        noteRepository.findById(id, getCurrentUserId()).orElseThrow(() -> new AuthenticationException("Forbidden"));
         return noteRepository.save(note);
     }
 
