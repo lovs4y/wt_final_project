@@ -30,7 +30,7 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
      */
     @Query(nativeQuery = true, value = "SELECT notes.id, notes.title, notes.created, notes.modified, notes.content, notes.notebook_id " +
             "FROM notes " +
-            "INNER JOIN notebooks n on notes.notebook_id = n.id WHERE n.user_id = :userId AND notes.name = :title")
+            "INNER JOIN notebooks n on notes.notebook_id = n.id WHERE n.user_id = :userId AND notes.title = :title")
     List<Note> findByTitle(String title, Long userId);
 
     /**
