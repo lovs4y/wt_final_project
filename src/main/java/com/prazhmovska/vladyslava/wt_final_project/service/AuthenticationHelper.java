@@ -12,6 +12,11 @@ import java.util.Optional;
  */
 public class AuthenticationHelper {
 
+    /**
+     * Method getting principal from {@link org.springframework.security.core.context.SecurityContext} and casts it to UserDto.
+     *
+     * @return current user's details based on {@link org.springframework.security.core.context.SecurityContext}.
+     */
     public static UserDto getAuthenticationDetails() {
         return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
                 .map(Authentication::getPrincipal)
@@ -20,6 +25,9 @@ public class AuthenticationHelper {
                 .orElseThrow(() -> new RuntimeException("Authentication Failed"));
     }
 
+    /**
+     * Reads authentication details and gets user's id.
+     */
     public static Long getCurrentUserId() {
         return getAuthenticationDetails().getId();
     }

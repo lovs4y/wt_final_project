@@ -30,12 +30,21 @@ public class ApplicationConfig {
     private final UserRepository userRepository;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    /**
+     * Create {@link AuthenticationManager} based on {@link AuthenticationConfiguration}.
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
             throws Exception {
         return config.getAuthenticationManager();
     }
 
+    /**
+     * Create and configure {@link AuthenticationProvider}.
+     * DaoAuthenticationProvider configured user details service using anonymous class which calls
+     * {@link UserRepository#findByEmail(String)}.
+     * As a password encoder used {@link ApplicationConfig#passwordEncoder()} bean.
+     */
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -47,11 +56,20 @@ public class ApplicationConfig {
         return authProvider;
     }
 
+    /**
+     * Creates {@link PasswordEncoder}. As an implementation choosen {@link BCryptPasswordEncoder}.
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Configuration of {@link SecurityFilterChain} for {@link HttpSecurity}.
+     * Current configuration provides CORS policy, permitted all endpoints,
+     * specifies session management policy, apply authentication provider and
+     * register filter before processing request by servlet.
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)

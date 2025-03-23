@@ -8,6 +8,10 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Configuration for open api library.
+ * This configuration allows usage of Swagger to have a readable API documentation.
+ */
 @Configuration
 @OpenAPIDefinition(info = @Info(
         title = "Web Technologies",
@@ -17,6 +21,9 @@ import org.springframework.context.annotation.Configuration;
 public class OpenApiConfig  {
     private static final String BEARER_AUTH = "bearerAuth";
 
+    /**
+     * {@link OpenAPI} bean configured with security scheme according to project's strategy.
+     */
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
@@ -28,6 +35,4 @@ public class OpenApiConfig  {
                                 .scheme("bearer")
                                 .bearerFormat("JWT")));
     }
-
-
 }
